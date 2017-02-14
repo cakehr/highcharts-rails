@@ -4219,8 +4219,8 @@
                                 tspan.getAttribute('style') ? tspan : textNode
                             ).h;
                     },
-                    unescapeAngleBrackets = function(inputStr) {
-                        return inputStr.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+                    unescape = function(inputStr) {
+                        return inputStr.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
                     };
 
                 // The buildText code is quite heavy, so if we're not changing something
@@ -4247,7 +4247,7 @@
                 // Skip tspans, add text directly to text node. The forceTSpan is a hook
                 // used in text outline hack.
                 if (!hasMarkup && !textOutline && !ellipsis && !width && textStr.indexOf(' ') === -1) {
-                    textNode.appendChild(doc.createTextNode(unescapeAngleBrackets(textStr)));
+                    textNode.appendChild(doc.createTextNode(unescape(textStr)));
 
                     // Complex strings, add more logic
                 } else {
@@ -4310,7 +4310,7 @@
                                     });
                                 }
 
-                                span = unescapeAngleBrackets(span.replace(/<(.|\n)*?>/g, '') || ' ');
+                                span = unescape(span.replace(/<(.|\n)*?>/g, '') || ' ');
 
                                 // Nested tags aren't supported, and cause crash in Safari (#1596)
                                 if (span !== ' ') {
